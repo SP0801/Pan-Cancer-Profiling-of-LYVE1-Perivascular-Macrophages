@@ -1,48 +1,88 @@
-# Pan-Cancer Profiling of LYVE1⁺ Perivascular Macrophages
-Single-cell transcriptomic analysis of LYVE1⁺ perivascular macrophages and  fibroblast–macrophage cross-talk across multiple cancers. 
+Perivascular-like macrophages and PDGFRA/PDGFRB fibroblast ligands across cancers (GSE210347)
+Overview
 
----
+This repository analyzes the pan-cancer scRNA-seq dataset GSE210347 to identify a perivascular-like macrophage transcriptional program and prioritize stromal ligands that predict this program across cancers. The analysis uses NicheNet with PDGFRA/PDGFRB-expressing fibroblasts as the sender population and perivascular-high macrophages as the receiver population.
 
-## Background
+The analysis asks:
+Which fibroblast ligands are consistently ranked as candidate upstream regulators of a perivascular-like macrophage program across cancers?
 
-LYVE1⁺ macrophages are a specialized tissue-resident subset that occupy perivascular niches. They are known for their role in lymphatic remodeling, hyaluronan turnover, and vascular maintenance in healthy tissues. Recent single-cell studies have identified them as important regulators of angiogenesis, stromal organization, and immune suppression within tumors.
+Dataset
 
-These macrophages (often co-expressing FOLR2, MRC1, and C1QC) line the vasculature and secrete factors such as VEGFA and ANGPT2, promoting vessel stability and shaping immune infiltration. Their perivascular position and signaling functions make them key players in the tumor microenvironment (TME), yet they remain underexplored across cancers.
+Accession: GSE210347
 
-Fibroblasts form another major stromal component of the TME. They secrete growth factors, cytokines, and extracellular-matrix proteins that regulate tumor growth and immune cell behavior. Their communication with macrophages helps establish vascular niches that influence tumor progression and therapy resistance.
+Modality: single-cell RNA-seq
 
-Understanding this macrophage–fibroblast cross-talk can reveal conserved stromal signaling circuits that drive angiogenesis, immune modulation, and tissue remodeling across cancer types.
+Scope: pan-cancer solid tumors
 
----
+Definitions used in this analysis
+Macrophages
 
-## Project Objectives
+Macrophages were enriched from the myeloid compartment using CD68 as an inclusion marker. CD68 is not macrophage-exclusive, so downstream marker expression is used to interpret macrophage states.
 
-1. Identify LYVE1⁺ perivascular macrophages across single-cell datasets from multiple cancers.
-2. Characterize their transcriptional signatures and heterogeneity.
-3. Examine fibroblast–macrophage communication networks using **NicheNet**.
-4. Integrate findings across datasets to detect conserved or cancer-specific pathways involved in stromal signaling.
+Perivascular-like macrophages
 
----
+A perivascular-like score was computed using a composite marker panel. Canonical markers include LYVE1, FOLR2, MRC1, and CD163, which have been used to describe vascular-associated or resident-like macrophage populations in tumors and tissue atlases (Ramos et al., 2022; Anstee et al., 2023; Bahri et al., 2023). Additional scavenger and regulatory markers were included to capture broader macrophage programs that co-occur with resident-like states in single-cell profiles.
 
-## Tools and Datasets
+Cells in the top quartile of the score were defined as perivascular-high. This cutoff is a pragmatic threshold and does not imply a discrete biological boundary.
 
-- **R packages:** Seurat, dplyr, ggplot2, clusterProfiler, msigdbr, org.Hs.eg.db, nichenetr  
-- **Data sources:** Public single-cell RNA-seq datasets (details to be added)
+Fibroblast sender population
 
----
+Fibroblasts were subset based on expression of PDGFRA and PDGFRB. This choice is intended to capture major CAF compartments described in tumor single-cell studies, including PDGFRA-associated fibroblast programs and PDGFRB-associated myofibroblast/perivascular stromal programs (Öhlund et al., 2017; Elyada et al., 2019). This does not imply that all PDGFRA/PDGFRB fibroblasts are physically perivascular.
 
-## Workflow Overview
+Workflow summary
 
-1. Quality control, normalization, and clustering in Seurat  
-2. Annotation of LYVE1⁺ macrophages and stromal cell subsets  
-3. Proportion and signature analysis across cancers  
-4. Ligand–target inference using NicheNet  
-5. Visualization and biological interpretation
+Global embedding for dataset overview
 
----
+Subset myeloid cells
 
-## Repository Layout
+Extract CD68+ macrophage-enriched compartment
 
+Score perivascular-like program and define PV-high cells
 
-This repository is under active development; scripts and figures will be added progressively.
+Differential expression: PV-high vs PV-low
 
+Functional enrichment (KEGG)
+
+NicheNet per cancer: PDGFRA/PDGFRB fibroblasts (sender) → PV-high macrophages (receiver)
+
+Cross-cancer comparison of ligand rankings
+
+Results summary 
+
+Perivascular-high macrophages are detectable across cancer types but vary in abundance by tissue.
+
+PV-high macrophages show enrichment for lysosomal and phagocytic programs, consistent with scavenger-like macrophage states.
+
+NicheNet prioritizes a small set of fibroblast ligands across cancers, with CSF1 and TGFB1 repeatedly ranked among the highest.
+
+These results represent computational prioritization and should be interpreted as candidate regulatory signals rather than evidence of causality.
+
+Figures 
+
+Global UMAP by cell type
+
+Myeloid embedding with CD68+ cells highlighted
+
+Marker feature plots on macrophage embedding
+
+Perivascular module score and PV-high gate
+
+PV score distribution across cancers
+
+Per-cancer NicheNet ligand activity
+
+Conserved ligand summary across cancers
+
+KEGG enrichment of PV-high macrophages
+
+References
+
+Ramos RN et al. Cell 2022. Tissue-resident FOLR2+ macrophages associate with perivascular niches in tumor stroma.
+
+Anstee JW et al. Dev Cell 2023. LYVE-1+ macrophages form CCR5-dependent perivascular niches in tumors.
+
+Bahri R et al. Front Immunol 2023. Perivascular tumor-associated macrophages and their role in cancer.
+
+Öhlund D et al. J Exp Med 2017. Distinct fibroblast populations in pancreatic cancer.
+
+Elyada E et al. Cancer Discov 2019. CAF heterogeneity across species in pancreatic cancer.
